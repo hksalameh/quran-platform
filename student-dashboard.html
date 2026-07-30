@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة الطالب - منصة إتقان</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background: #f0f7f4; margin: 0; padding: 20px; color: #1a4331; }
+        .dashboard-container { max-width: 800px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 4px solid #ce9a2b; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        h2 { margin-top: 0; color: #27694d; }
+        .progress-bar { background: #e2e8f0; border-radius: 10px; height: 20px; width: 100%; overflow: hidden; margin-top: 10px; }
+        .progress-fill { background: #ce9a2b; height: 100%; width: 45%; /* نسبة التقدم */ }
+        .session-info { display: flex; justify-content: space-between; align-items: center; background: #e8f4ee; padding: 15px; border-radius: 10px; margin-top: 15px; }
+        .btn-enter { background: #1a4331; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; }
+        .btn-enter:hover { background: #27694d; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <div class="header">
+            <h2>مرحباً بك في لوحة الطالب</h2>
+            <a href="index.html" style="color: #c0392b; text-decoration: none; font-weight: bold;">تسجيل الخروج</a>
+        </div>
+
+        <div class="card">
+            <h2>معلومات الحفظ والتقدم</h2>
+            <p><strong>المستوى الحالي:</strong> الباقة الأساسية (حفظ سورة البقرة)</p>
+            <p><strong>نسبة الإنجاز:</strong> 45%</p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>حصتي القادمة</h2>
+            <div class="session-info">
+                <div>
+                    <p><strong>المعلم:</strong> الشيخ محمود العلي</p>
+                    <p><strong>الموعد:</strong> اليوم - الساعة 4:00 مساءً</p>
+                </div>
+                <!-- الزر يوجه الطالب لغرفته المخصصة تلقائياً -->
+                <a href="room.html?room=session_101" class="btn-enter">دخول قاعة التسميع</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

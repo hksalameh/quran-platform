@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    <script>
+ <script>
         const loginForm = document.getElementById('loginForm');
         const errorMsg = document.getElementById('errorMsg');
 
@@ -67,11 +67,6 @@
                     body: JSON.stringify({ email, password })
                 });
 
-                const contentType = response.headers.get("content-type");
-                if (!contentType || !contentType.includes("application/json")) {
-                    throw new Error('السيرفر لم يستجب بشكل صحيح.');
-                }
-
                 const data = await response.json();
 
                 if (!response.ok) {
@@ -79,8 +74,14 @@
                 }
 
                 localStorage.setItem('token', data.token);
-                alert('تم تسجيل الدخول بنجاح!');
-                window.location.href = 'room.html';
+                localStorage.setItem('role', data.role); // حفظ نوع الحساب
+                
+                // التوجيه حسب نوع الحساب
+                if (data.role === 'teacher') {
+                    window.location.href = 'teacher-dashboard.html';
+                } else {
+                    window.location.href = 'student-dashboard.html';
+                }
             } catch (err) {
                 errorMsg.textContent = err.message;
                 errorMsg.style.display = 'block';
