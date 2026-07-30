@@ -76,7 +76,7 @@
     </div>
 
     <!-- استدعاء مكتبة Socket.io للواجهة -->
-    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script src="https://quran-platform-hlwq.onrender.com/socket.io/socket.io.js"></script>
     <script>
         const localVideo = document.getElementById('localVideo');
         const remoteVideo = document.getElementById('remoteVideo');
@@ -86,7 +86,7 @@
         let localStream;
         let peerConnection;
         // هنا نتصل بالسيرفر
-        const socket = io('http://localhost:3000'); 
+        const socket = io('https://quran-platform-hlwq.onrender.com');
         // رقم الغرفة (في المستقبل سيكون متغيراً لكل حجز)
         const roomId = 'quran-room-1'; 
 
