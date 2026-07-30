@@ -30,7 +30,6 @@
             object-fit: cover;
             border: 4px solid #ce9a2b;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            /* عكس الكاميرا لتبدو كالمرآة */
             transform: scaleX(-1); 
         }
         .controls {
@@ -63,39 +62,84 @@
     <br>
 
     <div class="videos">
-        <!-- كاميرا المستخدم الحالي -->
         <div>
             <h3 style="text-align: center;">أنت</h3>
             <video id="localVideo" autoplay playsinline muted></video>
         </div>
-        <!-- كاميرا الطرف الآخر -->
         <div>
             <h3 style="text-align: center;">الطرف الآخر</h3>
             <video id="remoteVideo" autoplay playsinline></video>
         </div>
     </div>
 
-    <!-- استدعاء مكتبة Socket.io للواجهة -->
     <script src="https://quran-platform-hlwq.onrender.com/socket.io/socket.io.js"></script>
     <script>
-    alert("السكربت يعمل!");
-    const localVideo = document.getElementById('localVideo');
-    const startCamBtn = document.getElementById('startCamBtn');
-    const joinBtn = document.getElementById('joinBtn');
-    
-    let localStream;
+        const localVideo = document.getElementById('localVideo');
+        const remoteVideo = document.getElementById('remoteVideo');
+        const startCamBtn = document.getElementById('startCamBtn');
+        const joinBtn = document.getElementById('joinBtn');
+        
+        let localStream;
+        let peerConnection;
+        const socket = io('https://quran-platform-hlwq.onrender.com');
+        const roomId = 'quran-room-1'; 
 
-    startCamBtn.addEventListener('click', async () => {
-        try {
-            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-            localVideo.srcObject = localStream;
-            startCamBtn.style.display = 'none';
-            joinBtn.style.display = 'block';
-            alert("تم تشغيل الكاميرا بنجاح!");
-        } catch (err) {
-            alert("خطأ الكاميرا: " + err.message);
+        const peerConfig = {
+            iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+        };
+
+        startCamBtn.addEventListener('click', async () => {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                localVideo.srcObject = localStream;
+                startCamBtn.style.display = 'none';
+                joinBtn.style.display = 'block';
+            } catch (err) {
+                alert("خطأ في الكاميرا: " + err.message);
+            }
+        });
+
+        joinBtn.addEventListener('click', () => {
+            socket.emit('join-room', roomId);
+            joinBtn.style.display = 'none';
+        });
+
+        socket.on('user-joined', async () => {
+            createPeerConnection();
+            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            socket.emit('offer', { offer, room: roomId });
+        });
+
+        socket.on('offer', async (data) => {
+            createPeerConnection();
+            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
+            const answer = await peerConnection.createAnswer();
+            await peerConnection.setLocalDescription(answer);
+            socket.emit('answer', { answer, room: roomId });
+        });
+
+        socket.on('answer', async (data) => {
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+        });
+
+        socket.on('ice-candidate', (data) => {
+            peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+        });
+
+        function createPeerConnection() {
+            peerConnection = new RTCPeerConnection(peerConfig);
+            peerConnection.ontrack = (event) => {
+                remoteVideo.srcObject = event.streams[0];
+            };
+            peerConnection.onicecandidate = (event) => {
+                if (event.candidate) {
+                    socket.emit('ice-candidate', { candidate: event.candidate, room: roomId });
+                }
+            };
         }
-    });
-</script>
+    </script>
 </body>
 </html>
