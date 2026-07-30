@@ -84,6 +84,11 @@
                     body: JSON.stringify({ name, email, password, role })
                 });
 
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error('السيرفر لم يستجب بشكل صحيح، تأكد من رفع التعديلات وانتهاء التحديث على Render.');
+                }
+
                 const data = await response.json();
 
                 if (!response.ok) {
