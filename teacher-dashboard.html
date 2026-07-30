@@ -7,59 +7,77 @@
     <style>
         body { font-family: 'Tajawal', sans-serif; background: #f0f7f4; margin: 0; padding: 20px; color: #1a4331; }
         .dashboard-container { max-width: 900px; margin: 0 auto; }
+        
+        /* الترويسة والملف الشخصي */
         .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 4px solid #ce9a2b; }
+        .profile-info { display: flex; align-items: center; gap: 15px; }
+        .profile-pic { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #27694d; }
+        .profile-name { margin: 0; color: #1a4331; font-size: 20px; }
+        .profile-role { margin: 0; font-size: 14px; color: #666; }
+        .logout-btn { color: #c0392b; text-decoration: none; font-weight: bold; }
+
         .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        h2 { margin-top: 0; color: #27694d; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { text-align: right; padding: 12px; border-bottom: 1px solid #e2e8f0; }
-        th { background-color: #e8f4ee; color: #1a4331; }
-        .btn-enter { background: #1a4331; color: white; padding: 8px 15px; text-decoration: none; border-radius: 6px; font-weight: bold; transition: 0.3s; display: inline-block; }
+        h2 { margin-top: 0; color: #27694d; font-size: 22px; border-bottom: 2px solid #e8f4ee; padding-bottom: 10px; }
+        
+        /* قائمة الطلاب */
+        .student-item { display: flex; justify-content: space-between; align-items: center; background: #e8f4ee; padding: 15px; border-radius: 10px; margin-top: 15px; flex-wrap: wrap; gap: 15px; }
+        .student-info { display: flex; align-items: center; gap: 10px; }
+        .student-pic { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+        
+        .btn-enter { background: #1a4331; color: white; padding: 8px 15px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; }
         .btn-enter:hover { background: #27694d; }
-        .btn-edit { background: #ce9a2b; color: white; padding: 8px 15px; text-decoration: none; border-radius: 6px; font-weight: bold; transition: 0.3s; display: inline-block; border: none; cursor: pointer; }
+        
+        /* إدارة المواعيد */
+        .btn-schedule { background: #ce9a2b; color: white; padding: 12px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; transition: 0.3s; text-align: center; }
+        .btn-schedule:hover { opacity: 0.9; }
     </style>
 </head>
 <body>
 
     <div class="dashboard-container">
         <div class="header">
-            <h2>مرحباً بك في لوحة المعلم</h2>
-            <a href="index.html" style="color: #c0392b; text-decoration: none; font-weight: bold;">تسجيل الخروج</a>
+            <div class="profile-info">
+                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150" alt="صورة المعلم" class="profile-pic">
+                <div>
+                    <h1 class="profile-name">الشيخ د. أحمد عبد الله</h1>
+                    <p class="profile-role">معلم - مسار الإجازة والتلاوة</p>
+                </div>
+            </div>
+            <a href="index.html" class="logout-btn">تسجيل الخروج</a>
+        </div>
+
+        <div class="card" style="text-align: center; border: 2px dashed #ce9a2b;">
+            <h2>إدارة المواعيد والطلاب</h2>
+            <p>يمكنك من هنا تحديد أوقات فراغك، قبول الطلاب الجدد، وتعديل المواعيد الحالية.</p>
+            <a href="schedule.html" class="btn-schedule">فتح صفحة إدارة المواعيد</a>
         </div>
 
         <div class="card">
-            <h2>جدول حصص اليوم</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>اسم الطالب</th>
-                        <th>المستوى / السورة</th>
-                        <th>الموعد</th>
-                        <th>الإجراء</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>أحمد محمد</td>
-                        <td>مراجعة سورة البقرة</td>
-                        <td>4:00 مساءً</td>
-                        <!-- الزر يوجه المعلم لنفس الغرفة الخاصة بالطالب الأول -->
-                        <td><a href="room.html?room=session_101" class="btn-enter">دخول الغرفة</a></td>
-                    </tr>
-                    <tr>
-                        <td>عمر خالد</td>
-                        <td>تسميع سورة آل عمران</td>
-                        <td>5:30 مساءً</td>
-                        <!-- الزر يوجه المعلم لغرفة أخرى خاصة بالطالب الثاني -->
-                        <td><a href="room.html?room=session_102" class="btn-enter">دخول الغرفة</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <h2>حصص اليوم</h2>
+            
+            <div class="student-item">
+                <div class="student-info">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="الطالب" class="student-pic">
+                    <div>
+                        <p style="margin:0; font-weight:bold;">هيثم خليل سلامة</p>
+                        <p style="margin:0; font-size:14px; color:#666;">الباقة الأساسية - سورة البقرة</p>
+                    </div>
+                </div>
+                <div><p style="margin:0;">4:00 مساءً</p></div>
+                <a href="room.html?room=session_101" class="btn-enter">دخول القاعة</a>
+            </div>
 
-        <div class="card">
-            <h2>إدارة الطلاب (قريباً)</h2>
-            <p>من هنا ستتمكن من تعديل أوقات الحصص، تقييم الطلاب، وتحديث نسب إنجازهم في واجهاتهم.</p>
-            <button class="btn-edit">إضافة موعد جديد</button>
+            <div class="student-item">
+                <div class="student-info">
+                    <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=150" alt="الطالب" class="student-pic">
+                    <div>
+                        <p style="margin:0; font-weight:bold;">عمر خالد</p>
+                        <p style="margin:0; font-size:14px; color:#666;">تسميع سورة آل عمران</p>
+                    </div>
+                </div>
+                <div><p style="margin:0;">5:30 مساءً</p></div>
+                <a href="room.html?room=session_102" class="btn-enter">دخول القاعة</a>
+            </div>
         </div>
     </div>
 
