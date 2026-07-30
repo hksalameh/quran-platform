@@ -7,29 +7,18 @@
     <style>
         body { font-family: 'Tajawal', sans-serif; background: #f0f7f4; margin: 0; padding: 20px; color: #1a4331; }
         .dashboard-container { max-width: 800px; margin: 0 auto; }
-        
-        /* الترويسة والملف الشخصي */
         .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 4px solid #ce9a2b; }
         .profile-info { display: flex; align-items: center; gap: 15px; }
-        .profile-pic { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #27694d; cursor: pointer; }
+        .profile-pic { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #27694d; }
         .profile-name { margin: 0; color: #1a4331; font-size: 20px; }
         .profile-role { margin: 0; font-size: 14px; color: #666; }
         .logout-btn { color: #c0392b; text-decoration: none; font-weight: bold; }
-
         .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
         h2 { margin-top: 0; color: #27694d; font-size: 22px; border-bottom: 2px solid #e8f4ee; padding-bottom: 10px; }
-        
-        /* شريط التقدم */
-        .progress-bar { background: #e2e8f0; border-radius: 10px; height: 20px; width: 100%; overflow: hidden; margin-top: 10px; }
-        .progress-fill { background: #ce9a2b; height: 100%; width: 45%; }
-        
-        /* معلومات الحصص والمعلمين */
         .session-info { display: flex; justify-content: space-between; align-items: center; background: #e8f4ee; padding: 15px; border-radius: 10px; margin-top: 15px; flex-wrap: wrap; gap: 15px; }
-        .teacher-badge { display: flex; align-items: center; gap: 10px; }
-        .teacher-pic { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-        
-        .btn-enter { background: #1a4331; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; }
+        .btn-enter { background: #1a4331; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; border: none; cursor: pointer; }
         .btn-enter:hover { background: #27694d; }
+        .expired-msg { color: #c0392b; font-weight: bold; background: #fadbd8; padding: 15px; border-radius: 8px; text-align: center; }
     </style>
 </head>
 <body>
@@ -38,61 +27,101 @@
         <!-- الترويسة ومعلومات الطالب -->
         <div class="header">
             <div class="profile-info">
-                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="صورة الطالب" class="profile-pic" title="اضغط لتغيير الصورة">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="صورة الطالب" class="profile-pic">
                 <div>
-                    <h1 class="profile-name">هيثم خليل سلامة</h1>
-                    <p class="profile-role">طالب - الباقة الأساسية</p>
+                    <h1 class="profile-name" id="studentName">جاري التحميل...</h1>
+                    <p class="profile-role" id="studentPlan">الباقة: ...</p>
                 </div>
             </div>
-            <a href="index.html" class="logout-btn">تسجيل الخروج</a>
+            <a href="index.html" class="logout-btn" onclick="localStorage.clear()">تسجيل الخروج</a>
         </div>
 
-        <!-- التقدم والإنجاز -->
+        <!-- رصيد الحصص -->
         <div class="card">
-            <h2>معلومات الحفظ والتقدم</h2>
-            <p><strong>المسار الحالي:</strong> حفظ سورة البقرة وتصحيح التلاوة</p>
-            <p><strong>نسبة الإنجاز:</strong> 45%</p>
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
-            </div>
+            <h2>معلومات الحفظ ورصيد الحصص</h2>
+            <p><strong>الحصص المتبقية لديك:</strong> <span id="sessionsLeft" style="color:#ce9a2b; font-weight:bold; font-size:20px;">...</span></p>
         </div>
 
-        <!-- المعلمون والحصص -->
+        <!-- قاعة الحصص -->
         <div class="card">
-            <h2>معلميَّ وحصصي القادمة</h2>
-            
-            <!-- الحصة الأولى -->
-            <div class="session-info">
-                <div class="teacher-badge">
-                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150" alt="المعلم" class="teacher-pic">
-                    <div>
-                        <p style="margin:0; font-weight:bold;">الشيخ د. أحمد عبد الله</p>
-                        <p style="margin:0; font-size:14px; color:#666;">مسار الإجازة</p>
-                    </div>
-                </div>
-                <div>
-                    <p style="margin:0;"><strong>الموعد:</strong> اليوم - 4:00 مساءً</p>
-                </div>
-                <a href="room.html?room=session_101" class="btn-enter">دخول القاعة</a>
+            <h2>قاعة الحصص المباشرة</h2>
+            <div id="sessionContainer">
+                <!-- يتم تعبئتها ديناميكياً عبر الجافاسكربت -->
             </div>
-
-            <!-- الحصة الثانية -->
-            <div class="session-info">
-                <div class="teacher-badge">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150" alt="المعلم" class="teacher-pic">
-                    <div>
-                        <p style="margin:0; font-weight:bold;">الأستاذ إبراهيم سلامة</p>
-                        <p style="margin:0; font-size:14px; color:#666;">تصحيح التلاوة</p>
-                    </div>
-                </div>
-                <div>
-                    <p style="margin:0;"><strong>الموعد:</strong> غداً - 5:30 مساءً</p>
-                </div>
-                <a href="room.html?room=session_102" class="btn-enter" style="background:#ce9a2b;">دخول القاعة</a>
-            </div>
-
         </div>
     </div>
 
+    <script>
+        const serverUrl = 'https://quran-platform-hlwq.onrender.com';
+        const token = localStorage.getItem('token');
+
+        // التحقق من تسجيل الدخول
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        async function loadUserData() {
+            try {
+                const response = await fetch(`${serverUrl}/user-info`, {
+                    headers: { 'Authorization': token }
+                });
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error);
+
+                // عرض البيانات في الواجهة
+                document.getElementById('studentName').textContent = data.name;
+                document.getElementById('studentPlan').textContent = `نوع الباقة: ${data.plan}`;
+                document.getElementById('sessionsLeft').textContent = data.sessions_left;
+
+                const container = document.getElementById('sessionContainer');
+                
+                // إذا كان رصيد الحصص أكبر من صفر، يظهر زر الدخول
+                if (data.sessions_left > 0) {
+                    container.innerHTML = `
+                        <div class="session-info">
+                            <div>
+                                <p style="margin:0; font-weight:bold;">الحصة التفاعلية المباشرة</p>
+                                <p style="margin:0; font-size:14px; color:#666;">عند الضغط سيتم خصم حصة واحدة من رصيدك والانتقال للقاعة</p>
+                            </div>
+                            <button onclick="enterSession()" class="btn-enter">دخول القاعة</button>
+                        </div>
+                    `;
+                } else {
+                    // إذا نفد الرصيد أو انتهت الحصة التجريبية، يُخفى الزر وتظهر رسالة التنبيه
+                    container.innerHTML = `
+                        <div class="expired-msg">
+                            عذراً، لقد انتهت حصتك التجريبية أو نفد رصيد حصصك المتبقية. يرجى ترقية باقتك للمتابعة.
+                            <br><br>
+                            <a href="checkout.html" class="btn-enter" style="display:inline-block; text-decoration:none;">ترقية الباقة الآن</a>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                alert('حدث خطأ أثناء تحميل البيانات: ' + err.message);
+                window.location.href = 'login.html';
+            }
+        }
+
+        async function enterSession() {
+            try {
+                const response = await fetch(`${serverUrl}/consume-session`, {
+                    method: 'POST',
+                    headers: { 'Authorization': token }
+                });
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error);
+
+                // الانتقال لغرفة الفيديو والصوت بعد خصم الحصة بنجاح
+                window.location.href = 'room.html?room=session_101';
+            } catch (err) {
+                alert(err.message);
+                location.reload();
+            }
+        }
+
+        loadUserData();
+    </script>
 </body>
 </html>
