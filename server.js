@@ -11,6 +11,7 @@ const io = new Server(server, { cors: { origin: "*" } });
 
 app.use(express.json());
 app.use(cors());
+app.use(express.static(__dirname)); // تفعيل قراءة صفحات الواجهة (HTML)
 
 const USERS_FILE = path.join(__dirname, 'users.json');
 
