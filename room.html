@@ -81,64 +81,73 @@
         
         let localStream;
         let peerConnection;
-        const socket = io('https://quran-platform-hlwq.onrender.com');
-        const roomId = 'quran-room-1'; 
 
-        const peerConfig = {
-            iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
-        };
-
+        // زر الكاميرا يعمل بشكل مستقل ومضمون
         startCamBtn.addEventListener('click', async () => {
+            alert("تم الضغط بنجاح!");
             try {
                 localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 localVideo.srcObject = localStream;
                 startCamBtn.style.display = 'none';
                 joinBtn.style.display = 'block';
             } catch (err) {
-               alert("خطأ: " + err.message);
+                alert("خطأ في الكاميرا: " + err.message);
             }
         });
 
-        joinBtn.addEventListener('click', () => {
-            socket.emit('join-room', roomId);
-            joinBtn.style.display = 'none';
-        });
+        // محاولة الاتصال بالسيرفر في الخلفية دون أن تؤثر على الكاميرا
+        let socket;
+        try {
+            socket = io('https://quran-platform-hlwq.onrender.com');
+            const roomId = 'quran-room-1'; 
 
-        socket.on('user-joined', async () => {
-            createPeerConnection();
-            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-            const offer = await peerConnection.createOffer();
-            await peerConnection.setLocalDescription(offer);
-            socket.emit('offer', { offer, room: roomId });
-        });
-
-        socket.on('offer', async (data) => {
-            createPeerConnection();
-            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-            await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
-            const answer = await peerConnection.createAnswer();
-            await peerConnection.setLocalDescription(answer);
-            socket.emit('answer', { answer, room: roomId });
-        });
-
-        socket.on('answer', async (data) => {
-            await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
-        });
-
-        socket.on('ice-candidate', (data) => {
-            peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
-        });
-
-        function createPeerConnection() {
-            peerConnection = new RTCPeerConnection(peerConfig);
-            peerConnection.ontrack = (event) => {
-                remoteVideo.srcObject = event.streams[0];
+            const peerConfig = {
+                iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
             };
-            peerConnection.onicecandidate = (event) => {
-                if (event.candidate) {
-                    socket.emit('ice-candidate', { candidate: event.candidate, room: roomId });
-                }
-            };
+
+            joinBtn.addEventListener('click', () => {
+                socket.emit('join-room', roomId);
+                joinBtn.style.display = 'none';
+            });
+
+            socket.on('user-joined', async () => {
+                createPeerConnection();
+                localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+                socket.emit('offer', { offer, room: roomId });
+            });
+
+            socket.on('offer', async (data) => {
+                createPeerConnection();
+                localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+                socket.emit('answer', { answer, room: roomId });
+            });
+
+            socket.on('answer', async (data) => {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+            });
+
+            socket.on('ice-candidate', (data) => {
+                peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+            });
+
+            function createPeerConnection() {
+                peerConnection = new RTCPeerConnection(peerConfig);
+                peerConnection.ontrack = (event) => {
+                    remoteVideo.srcObject = event.streams[0];
+                };
+                peerConnection.onicecandidate = (event) => {
+                    if (event.candidate) {
+                        socket.emit('ice-candidate', { candidate: event.candidate, room: roomId });
+                    }
+                };
+            }
+        } catch (e) {
+            console.log("Socket connection error, but camera will still work.");
         }
     </script>
 </body>
