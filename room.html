@@ -97,15 +97,21 @@
 
         // 1. تشغيل الكاميرا
         startCamBtn.addEventListener('click', async () => {
-            try {
-                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                localVideo.srcObject = localStream;
-                startCamBtn.style.display = 'none';
-                joinBtn.style.display = 'block';
-            } catch (err) {
-                alert("يرجى السماح بالوصول إلى الكاميرا والمايكروفون!");
-            }
-        });
+    alert("1. تم النقر على الزر بنجاح");
+    try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            alert("2. المتصفح لا يدعم ميزة الكاميرا (MediaDevices غير متوفر)");
+            return;
+        }
+        alert("3. جاري طلب صلاحية الكاميرا...");
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        localVideo.srcObject = localStream;
+        startCamBtn.style.display = 'none';
+        joinBtn.style.display = 'block';
+    } catch (err) {
+        alert("4. حدث خطأ: " + err.name + " - " + err.message);
+    }
+});
 
         // 2. دخول الغرفة
         joinBtn.addEventListener('click', () => {
