@@ -6,14 +6,7 @@
     <title>إنشاء حساب - منصة إتقان</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #1a4331;
-            --secondary: #27694d;
-            --accent: #ce9a2b;
-            --bg-light: #f0f7f4;
-            --white: #ffffff;
-            --text-dark: #2c3e50;
-        }
+        :root { --primary: #1a4331; --secondary: #27694d; --accent: #ce9a2b; --bg-light: #f0f7f4; --white: #ffffff; --text-dark: #2c3e50; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
         body { background-color: var(--bg-light); color: var(--text-dark); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         .auth-card { background: var(--white); padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 400px; border-top: 4px solid var(--accent); }
@@ -63,6 +56,12 @@
     </div>
 
     <script>
+        const serverUrl = 'https://quran-platform-hlwq.onrender.com';
+        
+        // التقاط الباقة من الرابط (إن وجدت)
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedPlan = urlParams.get('plan') || 'trial';
+
         const registerForm = document.getElementById('registerForm');
         const errorMsg = document.getElementById('errorMsg');
         const successMsg = document.getElementById('successMsg');
@@ -78,16 +77,11 @@
             const role = document.getElementById('role').value;
 
             try {
-                const response = await fetch('https://quran-platform-hlwq.onrender.com/register', {
+                const response = await fetch(`${serverUrl}/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password, role })
+                    body: JSON.stringify({ name, email, password, role, plan: selectedPlan })
                 });
-
-                const contentType = response.headers.get("content-type");
-                if (!contentType || !contentType.includes("application/json")) {
-                    throw new Error('السيرفر لم يستجب بشكل صحيح.');
-                }
 
                 const data = await response.json();
 

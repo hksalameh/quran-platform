@@ -9,15 +9,11 @@
         .checkout-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 500px; border-top: 4px solid #ce9a2b; }
         h2 { text-align: center; color: #27694d; margin-bottom: 20px; }
         .summary { background: #e8f4ee; padding: 15px; border-radius: 10px; margin-bottom: 20px; font-weight: bold; }
-        
-        /* تصميم خيارات الدفع */
         .payment-methods { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .payment-method { flex: 1; text-align: center; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: bold; font-size: 14px; background: white; }
         .payment-method.active { border-color: #ce9a2b; background: #fffcf5; color: #ce9a2b; }
-        
         .form-section { display: none; }
         .form-section.active { display: block; }
-        
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px; }
         input { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 15px; outline: none; box-sizing: border-box; }
@@ -33,13 +29,11 @@
     <div class="checkout-card">
         <h2>إتمام عملية الدفع</h2>
         
-        <!-- تفاصيل الباقة الديناميكية -->
         <div class="summary">
             <p style="margin: 0 0 10px 0;">الباقة المختارة: <span id="planName" style="color:#ce9a2b;">جاري التحميل...</span></p>
             <p style="margin: 0; font-size: 20px;">المبلغ المطلوب: <strong id="planPrice">0 دينار</strong></p>
         </div>
 
-        <!-- أزرار اختيار طريقة الدفع -->
         <div class="payment-methods">
             <div class="payment-method active" onclick="selectPayment('card', this)">بطاقة بنكية</div>
             <div class="payment-method" onclick="selectPayment('cliq', this)">كليك CliQ</div>
@@ -48,7 +42,6 @@
         </div>
 
         <form id="paymentForm">
-            <!-- قسم البطاقة البنكية -->
             <div id="form-card" class="form-section active">
                 <div class="form-group"><label>الاسم على البطاقة</label><input type="text" required placeholder="الاسم كاملاً"></div>
                 <div class="form-group"><label>رقم البطاقة</label><input type="text" required placeholder="0000 0000 0000 0000"></div>
@@ -58,7 +51,6 @@
                 </div>
             </div>
 
-            <!-- قسم محفظة كليك -->
             <div id="form-cliq" class="form-section">
                 <p style="font-size: 14px; margin-bottom: 15px; color: #666; background: #e8f4ee; padding: 10px; border-radius: 5px;">
                     يرجى تحويل المبلغ إلى الاسم المستعار: <strong>ITQAN-PAY</strong>
@@ -69,12 +61,10 @@
                 </div>
             </div>
 
-            <!-- قسم PayPal -->
             <div id="form-paypal" class="form-section">
                 <p style="font-size: 14px; margin-bottom: 15px; color: #666; text-align: center;">سيتم تحويلك إلى موقع PayPal لإتمام الدفع بأمان.</p>
             </div>
 
-            <!-- قسم Apple / Google Pay -->
             <div id="form-apple" class="form-section">
                 <p style="font-size: 14px; margin-bottom: 15px; color: #666; text-align: center;">سيتم فتح نافذة الدفع السريع عبر جهازك.</p>
             </div>
@@ -84,9 +74,8 @@
     </div>
 
     <script>
-        // قراءة نوع الباقة من الرابط وعرضها
         const urlParams = new URLSearchParams(window.location.search);
-        const planId = urlParams.get('plan') || 'basic'; // افتراضي إذا لم يكن هناك رابط
+        const planId = urlParams.get('plan') || 'basic';
 
         const planDetails = {
             'basic': { name: 'الباقة الأساسية', price: '١٥ دينار' },
@@ -97,19 +86,15 @@
         document.getElementById('planName').textContent = planDetails[planId].name;
         document.getElementById('planPrice').textContent = planDetails[planId].price;
 
-        // دالة التبديل بين طرق الدفع
         function selectPayment(method, element) {
-            // تغيير لون الزر المختار
             document.querySelectorAll('.payment-method').forEach(btn => btn.classList.remove('active'));
             element.classList.add('active');
 
-            // إخفاء جميع النماذج وإزالة شرط (required) منها كي لا يمنع الإرسال
             document.querySelectorAll('.form-section').forEach(sec => {
                 sec.classList.remove('active');
                 sec.querySelectorAll('input').forEach(input => input.removeAttribute('required'));
             });
 
-            // إظهار النموذج المطلوب وإضافة شرط (required) لحقوله فقط
             const activeForm = document.getElementById('form-' + method);
             activeForm.classList.add('active');
             
@@ -117,18 +102,16 @@
                 activeForm.querySelectorAll('input').forEach(input => input.setAttribute('required', 'true'));
             }
 
-            // تغيير نص زر المتابعة
             const submitBtn = document.getElementById('submitBtn');
             if (method === 'cliq') submitBtn.textContent = 'تأكيد الحوالة والتسجيل';
             else if (method === 'card') submitBtn.textContent = 'تأكيد الدفع والتسجيل';
             else submitBtn.textContent = 'المتابعة للدفع';
         }
 
-        // عند الإرسال
         document.getElementById('paymentForm').addEventListener('submit', (e) => {
             e.preventDefault();
             alert('تم استلام طلبك بنجاح! سيتم توجيهك لإنشاء حسابك.');
-            window.location.href = 'register.html';
+            window.location.href = `register.html?plan=${planId}`;
         });
     </script>
 </body>
