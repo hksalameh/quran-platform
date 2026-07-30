@@ -25,7 +25,8 @@ function saveUsers(users) {
 }
 
 app.post('/register', (req, res) => {
-    const { name, email, password, role } = req.body;
+    const { name, password, role } = req.body;
+    const email = req.body.email.toLowerCase(); // توحيد الحروف لصغيرة دائماً
     const users = getUsers();
     const existingUser = users.find(u => u.email === email);
     if (existingUser) {
@@ -37,7 +38,8 @@ app.post('/register', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-    const { email, password } = req.body;
+    const { password } = req.body;
+    const email = req.body.email.toLowerCase(); // توحيد الحروف لصغيرة عند الدخول
     const users = getUsers();
     const user = users.find(u => u.email === email && u.password === password);
     if (!user) {
