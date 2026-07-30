@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>غرفة التسميع</title>
+    <title>غرفة التسميع - منصة القرآن الكريم</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         body {
@@ -13,8 +13,19 @@
             align-items: center;
             padding: 20px;
             color: #1a4331;
+            margin: 0;
+            min-height: 100vh;
         }
-        h1 { margin-bottom: 20px; }
+        h1 { margin-bottom: 15px; font-size: 24px; }
+        .session-info {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #ce9a2b;
+        }
         .videos {
             display: flex;
             gap: 20px;
@@ -22,53 +33,79 @@
             flex-wrap: wrap;
             justify-content: center;
         }
-        video {
+        .video-box {
+            position: relative;
             background-color: #000;
             border-radius: 15px;
+            overflow: hidden;
+            border: 4px solid #ce9a2b;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        video {
             width: 400px;
             height: 300px;
             object-fit: cover;
-            border: 4px solid #ce9a2b;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             transform: scaleX(-1); 
+            display: block;
+        }
+        .video-label {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
         }
         .controls {
             display: flex;
-            gap: 15px;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         button {
-            padding: 12px 25px;
+            padding: 12px 20px;
             background: linear-gradient(45deg, #1a4331, #27694d);
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-family: 'Tajawal', sans-serif;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: 0.2s;
         }
-        #joinBtn { background: #ce9a2b; color: #fff; }
+        button:hover { opacity: 0.9; transform: translateY(-2px); }
+        #startCamBtn { background: #1a4331; }
+        #joinBtn { background: #ce9a2b; }
+        .toggle-btn { background: #e67e22; }
+        .toggle-btn.off { background: #c0392b; }
     </style>
 </head>
 <body>
 
-    <h1>غرفة التسميع - منصة القرآن الكريم</h1>
+    <h1>غرفة التسميع القرآنية</h1>
+    <div class="session-info">الوقت المتبقي للحصة: <span id="timer">15:00</span></div>
     
     <div class="controls">
-        <button id="startCamBtn">1. تشغيل الكاميرا</button>
+        <button id="startCamBtn">1. تشغيل الكاميرا والصوت</button>
         <button id="joinBtn" style="display: none;">2. دخول الغرفة</button>
+        <button id="toggleVideoBtn" style="display: none;" class="toggle-btn">إيقاف الكاميرا</button>
+        <button id="toggleAudioBtn" style="display: none;" class="toggle-btn">كتم الصوت</button>
     </div>
 
     <br>
 
     <div class="videos">
-        <div>
-            <h3 style="text-align: center;">أنت</h3>
+        <div class="video-box">
             <video id="localVideo" autoplay playsinline muted></video>
+            <div class="video-label">أنت</div>
         </div>
-        <div>
-            <h3 style="text-align: center;">الطرف الآخر</h3>
+        <div class="video-box">
             <video id="remoteVideo" autoplay playsinline></video>
+            <div class="video-label">الطرف الآخر</div>
         </div>
     </div>
 
@@ -78,24 +115,55 @@
         const remoteVideo = document.getElementById('remoteVideo');
         const startCamBtn = document.getElementById('startCamBtn');
         const joinBtn = document.getElementById('joinBtn');
+        const toggleVideoBtn = document.getElementById('toggleVideoBtn');
+        const toggleAudioBtn = document.getElementById('toggleAudioBtn');
         
         let localStream;
         let peerConnection;
 
-        // زر الكاميرا يعمل بشكل مستقل ومضمون
+        // 1. تشغيل الكاميرا والصوت
         startCamBtn.addEventListener('click', async () => {
-            alert("تم الضغط بنجاح!");
             try {
                 localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 localVideo.srcObject = localStream;
                 startCamBtn.style.display = 'none';
                 joinBtn.style.display = 'block';
+                toggleVideoBtn.style.display = 'inline-block';
+                toggleAudioBtn.style.display = 'inline-block';
             } catch (err) {
-                alert("خطأ في الكاميرا: " + err.message);
+                alert("خطأ في تشغيل الكاميرا: " + err.message);
             }
         });
 
-        // محاولة الاتصال بالسيرفر في الخلفية دون أن تؤثر على الكاميرا
+        // زر إيقاف/تشغيل الكاميرا (الفيديو فقط)
+        toggleVideoBtn.addEventListener('click', () => {
+            const videoTrack = localStream.getVideoTracks()[0];
+            if (videoTrack.enabled) {
+                videoTrack.enabled = false;
+                toggleVideoBtn.textContent = "تشغيل الكاميرا";
+                toggleVideoBtn.classList.add('off');
+            } else {
+                videoTrack.enabled = true;
+                toggleVideoBtn.textContent = "إيقاف الكاميرا";
+                toggleVideoBtn.classList.remove('off');
+            }
+        });
+
+        // زر كتم/إلغاء كتم الصوت
+        toggleAudioBtn.addEventListener('click', () => {
+            const audioTrack = localStream.getAudioTracks()[0];
+            if (audioTrack.enabled) {
+                audioTrack.enabled = false;
+                toggleAudioBtn.textContent = "إلغاء كتم الصوت";
+                toggleAudioBtn.classList.add('off');
+            } else {
+                audioTrack.enabled = true;
+                toggleAudioBtn.textContent = "كتم الصوت";
+                toggleAudioBtn.classList.remove('off');
+            }
+        });
+
+        // إعدادات الاتصال عبر السيرفر
         let socket;
         try {
             socket = io('https://quran-platform-hlwq.onrender.com');
@@ -108,6 +176,7 @@
             joinBtn.addEventListener('click', () => {
                 socket.emit('join-room', roomId);
                 joinBtn.style.display = 'none';
+                alert("تم الانضمام للغرفة بنجاح، في انتظار الطرف الآخر...");
             });
 
             socket.on('user-joined', async () => {
@@ -147,7 +216,7 @@
                 };
             }
         } catch (e) {
-            console.log("Socket connection error, but camera will still work.");
+            console.log("Socket error");
         }
     </script>
 </body>
