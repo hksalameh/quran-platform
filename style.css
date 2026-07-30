@@ -1,0 +1,113 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Tajawal', sans-serif;
+    /* خلفية متدرجة أنيقة */
+    background: linear-gradient(135deg, #f0f7f4 0%, #d4e8dd 100%);
+    color: #1a4331;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #0f4c3a;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+form {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 35px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+    /* خط علوي جمالي باللون الأخضر الملكي */
+    border-top: 5px solid #1a4331;
+    transition: transform 0.3s ease;
+}
+
+form:hover {
+    transform: translateY(-5px);
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: #1a4331;
+    text-align: center;
+    margin-bottom: 10px;
+    /* خط سفلي باللون الذهبي */
+    border-bottom: 2px solid #ce9a2b;
+    display: inline-block;
+    align-self: center;
+    padding-bottom: 8px;
+}
+
+input {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Tajawal', sans-serif;
+    background-color: #fcfcfc;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    border-color: #ce9a2b;
+    outline: none;
+    box-shadow: 0 0 8px rgba(206, 154, 43, 0.3);
+    background-color: #fff;
+}
+
+button {
+    padding: 15px;
+    /* زر متدرج اللون */
+    background: linear-gradient(45deg, #1a4331, #27694d);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: 'Tajawal', sans-serif;
+    box-shadow: 0 4px 15px rgba(26, 67, 49, 0.2);
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: linear-gradient(45deg, #133324, #1a4331);
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(26, 67, 49, 0.3);
+}
+
+hr {
+    width: 80%;
+    max-width: 400px;
+    border: 0;
+    height: 1px;
+    /* خط فاصل متدرج */
+    background: linear-gradient(to right, transparent, #ce9a2b, transparent);
+    margin: 40px 0;
+}
+
+h3 {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+    min-height: 20px;
+}
