@@ -2,63 +2,295 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>الدفع والاشتراك - منصة إتقان</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة القرآن الكريم - الحلقات التفاعلية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background: #f0f7f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; color: #1a4331; }
-        .checkout-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 500px; border-top: 4px solid #ce9a2b; }
-        h2 { text-align: center; color: #27694d; margin-bottom: 20px; }
-        .summary { background: #e8f4ee; padding: 15px; border-radius: 10px; margin-bottom: 20px; font-weight: bold; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px; }
-        input { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 15px; outline: none; box-sizing: border-box; }
-        input:focus { border-color: #27694d; }
-        .flex-row { display: flex; gap: 15px; }
-        .flex-row .form-group { flex: 1; }
-        .btn-pay { width: 100%; padding: 15px; background: #ce9a2b; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .btn-pay:hover { opacity: 0.9; }
+        :root {
+            --primary: #1a4331;
+            --secondary: #27694d;
+            --accent: #ce9a2b;
+            --bg-light: #f0f7f4;
+            --white: #ffffff;
+            --text-dark: #2c3e50;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        /* Navbar */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+        .btn-solid {
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+        }
+        .btn-solid:hover { opacity: 0.9; }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .hero h1 {
+            font-size: 38px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        .hero p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            opacity: 0.9;
+        }
+        .hero .btn-main {
+            background: var(--accent);
+            color: var(--white);
+            padding: 14px 35px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Section Containers */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 30px;
+            color: var(--primary);
+            margin-bottom: 40px;
+            font-weight: 800;
+        }
+
+        /* Teachers Grid */
+        .teachers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .teacher-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            padding-bottom: 20px;
+            border-top: 4px solid var(--accent);
+        }
+        .teacher-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: #ddd;
+        }
+        .teacher-card h3 {
+            margin: 15px 0 5px 0;
+            color: var(--primary);
+            font-size: 20px;
+        }
+        .teacher-card p {
+            color: #666;
+            font-size: 14px;
+            padding: 0 15px;
+            margin-bottom: 15px;
+        }
+
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .pricing-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 2px solid #e2e8f0;
+            position: relative;
+        }
+        .pricing-card.featured {
+            border-color: var(--accent);
+            transform: scale(1.03);
+        }
+        .pricing-card h3 { font-size: 22px; color: var(--primary); margin-bottom: 10px; }
+        .price { font-size: 28px; font-weight: 800; color: var(--accent); margin-bottom: 20px; }
+        .pricing-card ul { list-style: none; margin-bottom: 25px; text-align: right; }
+        .pricing-card ul li { margin-bottom: 10px; font-size: 15px; color: #555; }
+        .pricing-card ul li::before { content: "✓ "; color: var(--accent); font-weight: bold; }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+        }
+        footer p { opacity: 0.8; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <div class="checkout-card">
-        <h2>إتمام عملية الدفع</h2>
-        
-        <div class="summary">
-            <p style="margin: 0 0 10px 0;">الباقة المختارة: <span style="color:#ce9a2b;">باقة الإتقان الشاملة</span></p>
-            <p style="margin: 0; font-size: 20px;">المبلغ المطلوب: <strong>٢٥ دينار</strong></p>
+    <!-- الشريط العلوي -->
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">منصة إتقان للقرآن</a>
+            <ul class="nav-links">
+                <li><a href="#">الرئيسية</a></li>
+                <li><a href="#teachers">المعلمون</a></li>
+                <li><a href="#pricing">الباقات والأسعار</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-outline">دخول</a>
+                <a href="register.html" class="btn btn-solid">حساب جديد</a>
+            </div>
         </div>
+    </header>
 
-        <form id="paymentForm">
-            <div class="form-group">
-                <label>الاسم على البطاقة</label>
-                <input type="text" required placeholder="الاسم كاملاً">
-            </div>
-            <div class="form-group">
-                <label>رقم البطاقة</label>
-                <input type="text" required placeholder="0000 0000 0000 0000">
-            </div>
-            <div class="flex-row">
-                <div class="form-group">
-                    <label>تاريخ الانتهاء</label>
-                    <input type="text" required placeholder="MM/YY">
-                </div>
-                <div class="form-group">
-                    <label>رمز الأمان (CVV)</label>
-                    <input type="password" required placeholder="123">
-                </div>
-            </div>
-            <button type="submit" class="btn-pay">تأكيد الدفع والتسجيل</button>
-        </form>
-    </div>
+    <!-- القسم الرئيسي -->
+    <section class="hero">
+        <h1>اقرأ، تسمّع، وصحح تلاوتك باحترافية</h1>
+        <p>نخبة من المعلمين المجازين في خدمتك عبر حلقات تفاعلية صوت وصورة ومتابعة دقيقة لمستواك.</p>
+        <button class="btn-main" onclick="location.href='#pricing'">ابدأ رحلتك القرآنية الآن</button>
+    </section>
 
-    <script>
-        document.getElementById('paymentForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            // هنا سيتم لاحقاً ربط بوابة الدفع الحقيقية
-            alert('تم الدفع بنجاح! سيتم توجيهك لإنشاء حسابك.');
-            window.location.href = 'register.html';
-        });
-    </script>
+   <!-- قسم المعلمين -->
+    <section class="container" id="teachers">
+        <h2 class="section-title">نخبة من معلمي القرآن الكريم</h2>
+        <div class="teachers-grid">
+            <div class="teacher-card">
+                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400" alt="معلم" class="teacher-img">
+                <h3>الشيخ د. أحمد عبد الله</h3>
+                <p>حاصل على الإجازة بالقراءات العشر الكبرى والصغرى، وخبرة تتجاوز 15 عاماً في التدريس.</p>
+            </div>
+            <div class="teacher-card">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400" alt="معلم" class="teacher-img">
+                <h3>الشيخ محمود العلي</h3>
+                <p>متخصص في تصحيح التلاوة وأحكام التجويد المتقدمة وإعداد الحفاظ.</p>
+            </div>
+            <div class="teacher-card">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400" alt="معلم" class="teacher-img">
+                <h3>الأستاذ إبراهيم سلامة</h3>
+                <p>محفظ ومختص بمتابعة الطلاب الناشئة والمستويات الأساسية والمتوسطة.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم الأسعار والمستويات -->
+    <section class="container" id="pricing" style="background: #e8f4ee; border-radius: 20px;">
+        <h2 class="section-title">باقات الاشتراك المتاحة</h2>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>الباقة الأساسية</h3>
+                <div class="price">١٥ دينار / شهرياً</div>
+                <ul>
+                    <li>حلقات تسميع أسبوعية</li>
+                    <li>متابعة مستمرة للحفظ</li>
+                    <li>تقارير تقدم دورية</li>
+                </ul>
+                <a href="checkout.html" class="btn btn-outline" style="display: block; text-align: center;">اختر الباقة</a>
+            </div>
+            <div class="pricing-card featured">
+                <h3>باقة الإتقان الشاملة</h3>
+                <div class="price">٢٥ دينار / شهرياً</div>
+                <ul>
+                    <li>حلقات مكثفة (مرتان أسبوعياً)</li>
+                    <li>إمكانية تمديد وقت الحصة</li>
+                    <li>تصحيح تجويدي مفصل</li>
+                    <li>أولوية حجز المواعيد</li>
+                </ul>
+                <a href="checkout.html" class="btn btn-solid" style="display: block; text-align: center;">الباقة الأكثر طلباً</a>
+            </div>
+            <div class="pricing-card">
+                <h3>باقة الإجازة الخاصة</h3>
+                <div class="price">٤٠ دينار / شهرياً</div>
+                <ul>
+                    <li>جلسات فردية خاصة بالكامل</li>
+                    <li>مسار مخصص لنيل الإجازة</li>
+                    <li>إشراف مباشر من كبار القراء</li>
+                </ul>
+                <a href="checkout.html" class="btn btn-outline" style="display: block; text-align: center;">اختر الباقة</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- التذييل -->
+    <footer>
+        <p>جميع الحقوق محفوظة © 2026 منصة إتقان لتحفيظ القرآن الكريم</p>
+    </footer>
+
 </body>
 </html>
