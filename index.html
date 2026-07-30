@@ -2,111 +2,295 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>منصة القرآن الكريم</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>منصة القرآن الكريم - الحلقات التفاعلية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a4331;
+            --secondary: #27694d;
+            --accent: #ce9a2b;
+            --bg-light: #f0f7f4;
+            --white: #ffffff;
+            --text-dark: #2c3e50;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        /* Navbar */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+        .btn-solid {
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+        }
+        .btn-solid:hover { opacity: 0.9; }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .hero h1 {
+            font-size: 38px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        .hero p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            opacity: 0.9;
+        }
+        .hero .btn-main {
+            background: var(--accent);
+            color: var(--white);
+            padding: 14px 35px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Section Containers */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 30px;
+            color: var(--primary);
+            margin-bottom: 40px;
+            font-weight: 800;
+        }
+
+        /* Teachers Grid */
+        .teachers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .teacher-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            padding-bottom: 20px;
+            border-top: 4px solid var(--accent);
+        }
+        .teacher-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: #ddd;
+        }
+        .teacher-card h3 {
+            margin: 15px 0 5px 0;
+            color: var(--primary);
+            font-size: 20px;
+        }
+        .teacher-card p {
+            color: #666;
+            font-size: 14px;
+            padding: 0 15px;
+            margin-bottom: 15px;
+        }
+
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .pricing-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 2px solid #e2e8f0;
+            position: relative;
+        }
+        .pricing-card.featured {
+            border-color: var(--accent);
+            transform: scale(1.03);
+        }
+        .pricing-card h3 { font-size: 22px; color: var(--primary); margin-bottom: 10px; }
+        .price { font-size: 28px; font-weight: 800; color: var(--accent); margin-bottom: 20px; }
+        .pricing-card ul { list-style: none; margin-bottom: 25px; text-align: right; }
+        .pricing-card ul li { margin-bottom: 10px; font-size: 15px; color: #555; }
+        .pricing-card ul li::before { content: "✓ "; color: var(--accent); font-weight: bold; }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+        }
+        footer p { opacity: 0.8; font-size: 14px; }
+    </style>
 </head>
 <body>
-    <h1>منصة القرآن الكريم</h1>
-    
-    <form id="loginForm">
-        <h2>تسجيل الدخول</h2>
-        <input type="email" id="email" placeholder="البريد الإلكتروني" required>
-        <input type="password" id="password" placeholder="كلمة المرور" required>
-        <button type="submit">دخول</button>
-        <h3 id="message"></h3>
-    </form>
 
-    <div style="margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px;">
-        <h3>إنشاء حساب جديد</h3>
-        <form id="registerForm">
-            <input type="text" id="regName" placeholder="الاسم الكامل" required><br>
-            <input type="email" id="regEmail" placeholder="البريد الإلكتروني" required><br>
-            <input type="password" id="regPassword" placeholder="كلمة المرور" required><br>
-            <select id="regRole">
-                <option value="student">طالب</option>
-                <option value="teacher">معلم</option>
-            </select><br>
-            <button type="submit">تسجيل حساب</button>
-        </form>
-        <p id="regMessage"></p>
-    </div>
+    <!-- الشريط العلوي -->
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">منصة إتقان للقرآن</a>
+            <ul class="nav-links">
+                <li><a href="#">الرئيسية</a></li>
+                <li><a href="#teachers">المعلمون</a></li>
+                <li><a href="#pricing">الباقات والأسعار</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-outline">دخول</a>
+                <a href="register.html" class="btn btn-solid">حساب جديد</a>
+            </div>
+        </div>
+    </header>
 
-    <hr>
+    <!-- القسم الرئيسي -->
+    <section class="hero">
+        <h1>اقرأ، تسمّع، وصحح تلاوتك باحترافية</h1>
+        <p>نخبة من المعلمين المجازين في خدمتك عبر حلقات تفاعلية صوت وصورة ومتابعة دقيقة لمستواك.</p>
+        <button class="btn-main" onclick="location.href='register.html'">ابدأ رحلتك القرآنية الآن</button>
+    </section>
 
-    <form id="bookForm">
-        <h2>حجز موعد</h2>
-        <input type="number" id="studentId" placeholder="رقم الطالب (مثال: 1)" required>
-        <input type="number" id="teacherId" placeholder="رقم المعلم (مثال: 2)" required>
-        <input type="datetime-local" id="date" required>
-        <button type="submit">احجز الآن</button>
-        <h3 id="bookMessage"></h3>
-    </form>
+    <!-- قسم المعلمين -->
+    <section class="container" id="teachers">
+        <h2 class="section-title">نخبة من معلمي القرآن الكريم</h2>
+        <div class="teachers-grid">
+            <div class="teacher-card">
+                <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=400" alt="معلم" class="teacher-img">
+                <h3>الشيخ د. أحمد عبد الله</h3>
+                <p>حاصل على الإجازة بالقراءات العشر الكبرى والصغرى، وخبرة تتجاوز 15 عاماً في التدريس.</p>
+            </div>
+            <div class="teacher-card">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" alt="معلم" class="teacher-img">
+                <h3>الشيخ محمود العلي</h3>
+                <p>متخصص في تصحيح التلاوة وأحكام التجويد المتقدمة وإعداد الحفاظ.</p>
+            </div>
+            <div class="teacher-card">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400" alt="معلم" class="teacher-img">
+                <h3>الأستاذ إبراهيم سلامة</h3>
+                <p>محفظ ومختص بمتابعة الطلاب الناشئة والمستويات الأساسية والمتوسطة.</p>
+            </div>
+        </div>
+    </section>
 
-   <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const messageElement = document.getElementById('message');
+    <!-- قسم الأسعار والمستويات -->
+    <section class="container" id="pricing" style="background: #e8f4ee; border-radius: 20px;">
+        <h2 class="section-title">باقات الاشتراك المتاحة</h2>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>الباقة الأساسية</h3>
+                <div class="price">١٥ دينار / شهرياً</div>
+                <ul>
+                    <li>حلقات تسميع أسبوعية</li>
+                    <li>متابعة مستمرة للحفظ</li>
+                    <li>تقارير تقدم دورية</li>
+                </ul>
+                <a href="register.html" class="btn btn-outline" style="display: block; text-align: center;">اختر الباقة</a>
+            </div>
+            <div class="pricing-card featured">
+                <h3>باقة الإتقان الشاملة</h3>
+                <div class="price">٢٥ دينار / شهرياً</div>
+                <ul>
+                    <li>حلقات مكثفة (مرتان أسبوعياً)</li>
+                    <li>إمكانية تمديد وقت الحصة</li>
+                    <li>تصحيح تجويدي مفصل</li>
+                    <li>أولوية حجز المواعيد</li>
+                </ul>
+                <a href="register.html" class="btn btn-solid" style="display: block; text-align: center;">الباقة الأكثر طلباً</a>
+            </div>
+            <div class="pricing-card">
+                <h3>باقة الإجازة الخاصة</h3>
+                <div class="price">٤٠ دينار / شهرياً</div>
+                <ul>
+                    <li>جلسات فردية خاصة بالكامل</li>
+                    <li>مسار مخصص لنيل الإجازة</li>
+                    <li>إشراف مباشر من كبار القراء</li>
+                </ul>
+                <a href="register.html" class="btn btn-outline" style="display: block; text-align: center;">اختر الباقة</a>
+            </div>
+        </div>
+    </section>
 
-            messageElement.style.color = '#333';
-            messageElement.innerText = "جاري الاتصال بالسيرفر (قد يستغرق نصف دقيقة للاستيقاظ)...";
+    <!-- التذييل -->
+    <footer>
+        <p>جميع الحقوق محفوظة © 2026 منصة إتقان لتحفيظ القرآن الكريم</p>
+    </footer>
 
-            try {
-                const response = await fetch('https://quran-platform-hlwq.onrender.com/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                const data = await response.json();
-                
-                if (response.ok) {
-                    messageElement.style.color = 'green';
-                    messageElement.innerText = "تم تسجيل الدخول بنجاح! جاري تحويلك للغرفة...";
-                    localStorage.setItem('token', data.token);
-                    setTimeout(() => {
-                        window.location.href = 'room.html';
-                    }, 1000);
-                } else {
-                    messageElement.style.color = 'red';
-                    messageElement.innerText = data.error;
-                }
-            } catch (err) {
-                messageElement.style.color = 'red';
-                messageElement.innerText = "خطأ في الاتصال بالسيرفر";
-            }
-        });
-
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
-            const role = document.getElementById('regRole').value;
-            const regMessage = document.getElementById('regMessage');
-
-            try {
-                const response = await fetch('https://quran-platform-hlwq.onrender.com/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password, role })
-                });
-                const data = await response.json();
-                
-                if (response.ok) {
-                    regMessage.style.color = 'green';
-                    regMessage.innerText = "تم إنشاء الحساب بنجاح! يمكنك تسجيل الدخول الآن.";
-                } else {
-                    regMessage.style.color = 'red';
-                    regMessage.innerText = data.error;
-                }
-            } catch (err) {
-                regMessage.style.color = 'red';
-                regMessage.innerText = "خطأ في الاتصال بالسيرفر";
-            }
-        });
-    </script>
 </body>
 </html>
