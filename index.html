@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>منصة القرآن الكريم</title>
-    <!-- إضافة خط عربي احترافي -->
-   
-   <meta name="viewport" content="width=device-width, initial-scale=1.0"> <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -18,6 +17,21 @@
         <button type="submit">دخول</button>
         <h3 id="message"></h3>
     </form>
+
+    <div style="margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px;">
+        <h3>إنشاء حساب جديد</h3>
+        <form id="registerForm">
+            <input type="text" id="regName" placeholder="الاسم الكامل" required><br>
+            <input type="email" id="regEmail" placeholder="البريد الإلكتروني" required><br>
+            <input type="password" id="regPassword" placeholder="كلمة المرور" required><br>
+            <select id="regRole">
+                <option value="student">طالب</option>
+                <option value="teacher">معلم</option>
+            </select><br>
+            <button type="submit">تسجيل حساب</button>
+        </form>
+        <p id="regMessage"></p>
+    </div>
 
     <hr>
 
@@ -32,36 +46,64 @@
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const messageElement = document.getElementById('message');
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageElement = document.getElementById('message');
 
-    try {
-        const response = await fetch('http://localhost:3000/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            try {
+                const response = await fetch('http://localhost:3000/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    messageElement.style.color = 'green';
+                    messageElement.innerText = "تم تسجيل الدخول بنجاح! جاري تحويلك للغرفة...";
+                    localStorage.setItem('token', data.token);
+                    setTimeout(() => {
+                        window.location.href = 'room.html';
+                    }, 1000);
+                } else {
+                    messageElement.style.color = 'red';
+                    messageElement.innerText = data.error;
+                }
+            } catch (err) {
+                messageElement.style.color = 'red';
+                messageElement.innerText = "خطأ في الاتصال بالسيرفر";
+            }
         });
-        const data = await response.json();
-        
-        if (response.ok) {
-            messageElement.style.color = 'green';
-            messageElement.innerText = "تم تسجيل الدخول بنجاح! جاري تحويلك للغرفة...";
-            // حفظ التذكرة (Token) والانتقال لصفحة الغرفة مباشرة
-            localStorage.setItem('token', data.token);
-            setTimeout(() => {
-                window.location.href = 'room.html';
-            }, 1000);
-        } else {
-            messageElement.style.color = 'red';
-            messageElement.innerText = data.error;
-        }
-    } catch (err) {
-        messageElement.style.color = 'red';
-        messageElement.innerText = "خطأ في الاتصال بالسيرفر";
-    }
-});
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const role = document.getElementById('regRole').value;
+            const regMessage = document.getElementById('regMessage');
+
+            try {
+                const response = await fetch('http://localhost:3000/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password, role })
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    regMessage.style.color = 'green';
+                    regMessage.innerText = "تم إنشاء الحساب بنجاح! يمكنك تسجيل الدخول الآن.";
+                } else {
+                    regMessage.style.color = 'red';
+                    regMessage.innerText = data.error;
+                }
+            } catch (err) {
+                regMessage.style.color = 'red';
+                regMessage.innerText = "خطأ في الاتصال بالسيرفر";
+            }
+        });
     </script>
 </body>
 </html>
